@@ -6,7 +6,8 @@
 
 # Set a random password for the database user and the Nextcloud admin user
 DB_PASS=$(openssl rand -base64 12)
-TIMEZONE="Europe/London"
+#Slash is escaped for sed command
+TIMEZONE="Europe\/London"
 PHPVER="8.3"
 GITHUB_PATH="https://raw.githubusercontent.com/jradxl/nextcloud-install/refs/heads/master"
 
