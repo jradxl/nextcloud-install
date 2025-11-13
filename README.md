@@ -1,15 +1,18 @@
 # Updates for my fork
-Usage: Install git, then clone repository.
-If a container or VM, script will install wget and curl
-Paramaterised: PHPVER, TIMEZONE, GITHUB_PATH for nextcloud.conf download
-
+Usage: Install git, then clone repository, enter directory and run ./install.sh  
+As a Container or VM might be being used, script will install wget and curl.  
+Parameterised: PHPVER, TIMEZONE, GITHUB_PATH for nextcloud.conf download.  
+  
 Working on Ubuntu 24.04, using php8.3 and Nginx. Needed php8.3-redis to be installed, see lines 59 and 69  
+
 Not tested for Debian and Apache  
-Changed nginx config for server to localhost  
+Changed nginx config for servername to localhost  
 Changed nginx config for webfinger and nodeinfo  
-Added opcache.interned_strings_buffer=32 change  
+Removed nginx config duplicate "js" entry  
+Enhanced opcache entries, such as opcache.interned_strings_buffer=64  
+Runs some OCC commands  
   
-  
+    
 # Nextcloud-Install
 
 This repository contains a bash script to automate the installation of Nextcloud on Debian or Ubuntu servers. The script handles the installation and configuration of necessary dependencies, web server setup, database setup, and Nextcloud installation.
