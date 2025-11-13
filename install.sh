@@ -23,7 +23,9 @@ fi
 # Update the system.
 apt-get update && apt-get -y full-upgrade
 
-apt-get install wget -y
+#Assuming Container or VM without these.
+apt-get install wget curl -y
+
 # Check if the website is online
 if ! wget --spider https://download.nextcloud.com/server/releases/latest.zip; then
     echo "The website https://download.nextcloud.com is not online. Please check your internet connection."

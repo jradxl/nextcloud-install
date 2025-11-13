@@ -1,8 +1,13 @@
 # Updates for my fork
-Working on Ubuntu 24.04, using php8.3. Needed php8.3-redis to be installed, see lines 59 and 69  
+Usage: Install git, then clone repository.
+If a container or VM, script will install wget and curl
+Paramaterised: PHPVER, TIMEZONE, GITHUB_PATH for nextcloud.conf download
+
+Working on Ubuntu 24.04, using php8.3 and Nginx. Needed php8.3-redis to be installed, see lines 59 and 69  
+Not tested for Debian and Apache  
 Changed nginx config for server to localhost  
 Changed nginx config for webfinger and nodeinfo  
-
+Added opcache.interned_strings_buffer=32 change  
   
   
 # Nextcloud-Install
