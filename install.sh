@@ -145,8 +145,7 @@ systemctl restart $webserver
 
 # Configure PHP-FPM
 sed -i 's/memory_limit = .*/memory_limit = 512M/' /etc/php/"$PHPVER"/fpm/php.ini
-sed -i 's/memory_limit = .*/memory_limit = 512M/' /etc/php/"$PHPVER"/fpm/php.ini
-sed -i "s/;date.timezone.*/date.timezone = $TIMEZONE" /etc/php/"$PHPVER"/fpm/php.ini
+sed -i "s/;date.timezone.*/date.timezone = $TIMEZONE/" /etc/php/"$PHPVER"/fpm/php.ini
 sed -i 's/upload_max_filesize = .*/upload_max_filesize = 10240M/' /etc/php/"$PHPVER"/fpm/php.ini
 sed -i 's/post_max_size = .*/post_max_size = 10240M/' /etc/php/"$PHPVER"/fpm/php.ini
 
