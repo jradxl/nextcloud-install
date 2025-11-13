@@ -83,12 +83,13 @@ done
 # Prompt the user to choose between Apache and Nginx
 echo "Welcome to the WebServer installer!"
 while true; do
-    read -p "Type '1' for Apache or '2' for Nginx: " webserver
-    case $webserver in
+    read -p "Type '1' for Apache or '2' for Nginx: " choice
+    case $choice in
         1)
             # Apache
             echo "########## Installing and configuring Apache...##########"
-
+            webserver=apache2
+            
             # Install Apache
             apt-get install apache2 apache2-utils -y
 
@@ -107,7 +108,7 @@ while true; do
         2)
             # Nginx
             echo "########## Installing and configuring Nginx...##########"
-
+            webserver=nginx
             # Install Nginx
             apt-get install nginx -y
 
@@ -143,7 +144,7 @@ sed -i 's/memory_limit = .*/memory_limit = 512M/' /etc/php/"$PHPVER"/fpm/php.ini
 sed -i 's/;date.timezone.*/date.timezone = $TIMEZONE' /etc/php/"$PHPVER"/fpm/php.ini
 sed -i 's/upload_max_filesize = .*/upload_max_filesize = 10240M/' /etc/php/"$PHPVER"/fpm/php.ini
 sed -i 's/post_max_size = .*/post_max_size = 10240M/' /etc/php/"$PHPVER"/fpm/php.ini
-sed -i 'opcache.interned_strings_buffer=8/opcache.interned_strings_buffer=32' /etc/php/"$PHPVER"/fpm/php.ini
+sed -i 's/opcache.interned_strings_buffer=8/opcache.interned_strings_buffer=32/' /etc/php/"$PHPVER"/fpm/php.ini
 
 # Restart and apply changes to WebServer and PHP
 systemctl restart $webserver
