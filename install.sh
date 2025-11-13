@@ -145,10 +145,17 @@ systemctl restart $webserver
 
 # Configure PHP-FPM
 sed -i 's/memory_limit = .*/memory_limit = 512M/' /etc/php/"$PHPVER"/fpm/php.ini
-sed -i 's/;date.timezone.*/date.timezone = $TIMEZONE' /etc/php/"$PHPVER"/fpm/php.ini
+sed -i 's/memory_limit = .*/memory_limit = 512M/' /etc/php/"$PHPVER"/fpm/php.ini
+sed -i "s/;date.timezone.*/date.timezone = $TIMEZONE" /etc/php/"$PHPVER"/fpm/php.ini
 sed -i 's/upload_max_filesize = .*/upload_max_filesize = 10240M/' /etc/php/"$PHPVER"/fpm/php.ini
 sed -i 's/post_max_size = .*/post_max_size = 10240M/' /etc/php/"$PHPVER"/fpm/php.ini
-sed -i 's/opcache.interned_strings_buffer=8/opcache.interned_strings_buffer=32/' /etc/php/"$PHPVER"/fpm/php.ini
+
+sed -i 's/;opcache.enable=1/opcache.enable=1/' /etc/php/"$PHPVER"/fpm/php.ini
+sed -i 's/;opcache.memory_consumption=128/opcache.memory_consumption=256/' /etc/php/"$PHPVER"/fpm/php.ini
+sed -i 's/;opcache.save_comments=1/opcache.save_comments=1/' /etc/php/"$PHPVER"/fpm/php.ini
+sed -i 's/;opcache.max_accelerated_files=10000/opcache.max_accelerated_files=10000/' /etc/php/"$PHPVER"/fpm/php.ini
+sed -i 's/;opcache.revalidate_freq=2/opcache.revalidate_freq=60/' /etc/php/"$PHPVER"/fpm/php.ini
+sed -i 's/;opcache.interned_strings_buffer=8/opcache.interned_strings_buffer=64/' /etc/php/"$PHPVER"/fpm/php.ini
 
 # Restart and apply changes to WebServer and PHP
 systemctl restart $webserver
@@ -215,6 +222,8 @@ tee -a /var/www/nextcloud/config/custom.config.php <<EOF
   ),
   'trashbin_retention_obligation' => 'auto,30',
   'versions_retention_obligation' => 'auto,30',
+  'maintenance' => false,
+  'maintenance_window_start' => 17,
 );
 EOF
 
