@@ -84,6 +84,7 @@ done
 
 # Prompt the user to choose between Apache and Nginx
 echo "Welcome to the WebServer installer!"
+webserver=""
 while true; do
     read -p "Type '1' for Apache or '2' for Nginx: " choice
     case $choice in
@@ -97,8 +98,8 @@ while true; do
 
             # Create the VirtualHost for Nextcloud
             cd /etc/apache2/sites-available
-            curl -sSfL https://raw.githubusercontent.com/edsonsbj/Nextcloud/master/etc/apache/nextcloud.conf -o nextcloud.conf
-
+            ##NO! curl -sSfL https://raw.githubusercontent.com/edsonsbj/Nextcloud/master/etc/apache/nextcloud.conf -o nextcloud.conf
+            curl -sSfL "$GITHUB_PATH/etc/apache/nextcloud.conf" -o nextcloud.conf    
             # Perform Apache configurations
             a2ensite nextcloud.conf
             a2dissite 000-default.conf
@@ -111,13 +112,14 @@ while true; do
             # Nginx
             echo "########## Installing and configuring Nginx...##########"
             webserver=nginx
+
             # Install Nginx
             apt-get install nginx -y
 
             # Create the VirtualHost for Nextcloud
             cd /etc/nginx/sites-available
             ##NO! curl -sSfL https://raw.githubusercontent.com/edsonsbj/Nextcloud/master/etc/nginx/nextcloud.conf -o nextcloud
-            curl -sSfL "$GITHUBPATH"/etc/nginx/nextcloud.conf -o nextcloud     
+            curl -sSfL "$GITHUB_PATH/etc/nginx/nextcloud.conf" -o nextcloud     
             ln -s /etc/nginx/sites-available/nextcloud /etc/nginx/sites-enabled/
             rm /etc/nginx/sites-enabled/default
             sed -i 's/;clear_env = no/clear_env = no/g' /etc/php/"$PHPVER"/fpm/pool.d/www.conf
