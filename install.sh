@@ -6,6 +6,9 @@
 
 # Set a random password for the database user and the Nextcloud admin user
 DB_PASS=$(openssl rand -base64 12)
+TIMEZONE="Europe/London"
+PHPVER="8.3"
+GITHUB_PATH="https://raw.githubusercontent.com/jradxl/nextcloud-install/refs/heads/master"
 
 #############################################################################################
 #################################### TESTS #################################################
@@ -56,7 +59,7 @@ while true; do
             wget -O /etc/apt/trusted.gpg.d/php.gpg https://packages.sury.org/php/apt.gpg 
             sh -c 'echo "deb https://packages.sury.org/php/ $(lsb_release -sc) main" > /etc/apt/sources.list.d/php.list'
             apt-get update
-            apt-get install unzip imagemagick php8.3 php8.3-{fpm,cli,curl,gd,mbstring,xml,zip,bz2,intl,bcmath,gmp,imagick,mysql,redis} -y
+            apt-get install unzip imagemagick php"$PHPVER" php"$PHPVER"-{fpm,cli,curl,gd,mbstring,xml,zip,bz2,intl,bcmath,gmp,imagick,mysql,redis} -y
             break
             ;;
         2)
@@ -66,7 +69,7 @@ while true; do
             apt-get install software-properties-common -y
             add-apt-repository ppa:ondrej/php -y
             apt-get update
-            apt-get install unzip imagemagick php8.3 php8.3-{fpm,cli,curl,gd,mbstring,xml,zip,bz2,intl,bcmath,gmp,imagick,mysql,redis} -y
+            apt-get install unzip imagemagick php"$PHPVER" php"$PHPVER"-{fpm,cli,curl,gd,mbstring,xml,zip,bz2,intl,bcmath,gmp,imagick,mysql,redis} -y
             break
             ;;
         *)
@@ -110,12 +113,14 @@ while true; do
 
             # Create the VirtualHost for Nextcloud
             cd /etc/nginx/sites-available
-            curl -sSfL https://raw.githubusercontent.com/edsonsbj/Nextcloud/master/etc/nginx/nextcloud.conf -o nextcloud
+            ##NO! curl -sSfL https://raw.githubusercontent.com/edsonsbj/Nextcloud/master/etc/nginx/nextcloud.conf -o nextcloud
+            curl -sSfL "$GITHUBPATH"/etc/nginx/nextcloud.conf -o nextcloud     
             ln -s /etc/nginx/sites-available/nextcloud /etc/nginx/sites-enabled/
             rm /etc/nginx/sites-enabled/default
-            sed -i 's/;clear_env = no/clear_env = no/g' /etc/php/8.3/fpm/pool.d/www.conf
-            sed -i 's/;cgi.fix_pathinfo=0/cgi.fix_pathinfo=0/g' /etc/php/8.3/fpm/php.ini
+            sed -i 's/;clear_env = no/clear_env = no/g' /etc/php/"$PHPVER"/fpm/pool.d/www.conf
+            sed -i 's/;cgi.fix_pathinfo=0/cgi.fix_pathinfo=0/g' /etc/php/"$PHPVER"/fpm/php.ini
             systemctl reload nginx
+            #restart php"$PHPVER"-fpm later...
             break
             ;;
         *)
@@ -134,14 +139,15 @@ phpenmod redis
 systemctl restart $webserver
 
 # Configure PHP-FPM
-sed -i 's/memory_limit = .*/memory_limit = 512M/' /etc/php/8.3/fpm/php.ini
-sed -i 's/;date.timezone.*/date.timezone = America\/Sao_Paulo/' /etc/php/8.3/fpm/php.ini
-sed -i 's/upload_max_filesize = .*/upload_max_filesize = 10240M/' /etc/php/8.3/fpm/php.ini
-sed -i 's/post_max_size = .*/post_max_size = 10240M/' /etc/php/8.3/fpm/php.ini
+sed -i 's/memory_limit = .*/memory_limit = 512M/' /etc/php/"$PHPVER"/fpm/php.ini
+sed -i 's/;date.timezone.*/date.timezone = $TIMEZONE' /etc/php/"$PHPVER"/fpm/php.ini
+sed -i 's/upload_max_filesize = .*/upload_max_filesize = 10240M/' /etc/php/"$PHPVER"/fpm/php.ini
+sed -i 's/post_max_size = .*/post_max_size = 10240M/' /etc/php/"$PHPVER"/fpm/php.ini
+sed -i 'opcache.interned_strings_buffer=8/opcache.interned_strings_buffer=32' /etc/php/"$PHPVER"/fpm/php.ini
 
 # Restart and apply changes to WebServer and PHP
 systemctl restart $webserver
-systemctl restart php8.3-fpm
+systemctl restart php"$PHPVER"-fpm
 
 # Create the Database
 mysql -e "CREATE DATABASE nextcloud;"
@@ -218,3 +224,4 @@ EOF
 apt-get install ffmpeg -y
 
 echo "Nextcloud installation has been completed successfully!"
+
