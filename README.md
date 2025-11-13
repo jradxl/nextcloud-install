@@ -10,9 +10,9 @@ Changed nginx config for servername to localhost
 Changed nginx config for webfinger and nodeinfo  
 Removed nginx config duplicate "js" entry  
 Enhanced opcache entries, such as opcache.interned_strings_buffer=64  
-Runs some OCC commands  
+Suggests some OCC commands to run after Webinstaller  
   
-    
+  
 # Nextcloud-Install
 
 This repository contains a bash script to automate the installation of Nextcloud on Debian or Ubuntu servers. The script handles the installation and configuration of necessary dependencies, web server setup, database setup, and Nextcloud installation.

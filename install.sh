@@ -237,10 +237,11 @@ EOF
 # Install ffmpeg to enable video thumbnails
 apt-get install ffmpeg -y
 
-echo "Running OCC commands"
-sudo -E -u www-data php"$PHPVER" /var/www/nextcloud/occ maintenance:repair --include-expensive
-sudo -E -u www-data php"$PHPVER" /var/www/nextcloud/occ db:add-missing-indices
-
 echo ""
 echo "Nextcloud installation has been completed successfully!"
+echo ""
+echo "Suggest running these OCC commands after WebInstaller..."
+echo "sudo -E -u www-data php"$PHPVER" /var/www/nextcloud/occ maintenance:repair --include-expensive"
+echo "sudo -E -u www-data php"$PHPVER" /var/www/nextcloud/occ db:add-missing-indices"
+echo ""
 
