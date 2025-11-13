@@ -17,6 +17,10 @@ if [ "$EUID" -ne 0 ]; then
   exit
 fi
 
+# Update the system.
+apt-get update && apt-get -y full-upgrade
+
+apt-get install wget -y
 # Check if the website is online
 if ! wget --spider https://download.nextcloud.com/server/releases/latest.zip; then
     echo "The website https://download.nextcloud.com is not online. Please check your internet connection."
@@ -37,9 +41,6 @@ exec 2>&1
 #################################### STARTING INSTALLATION #################################
 #############################################################################################
 
-# Update the system.
-apt-get update && apt-get -y full-upgrade
-
 # Install PHP and necessary extensions
 
 # Prompt the user to choose between Debian and Ubuntu
@@ -55,7 +56,7 @@ while true; do
             wget -O /etc/apt/trusted.gpg.d/php.gpg https://packages.sury.org/php/apt.gpg 
             sh -c 'echo "deb https://packages.sury.org/php/ $(lsb_release -sc) main" > /etc/apt/sources.list.d/php.list'
             apt-get update
-            apt-get install unzip imagemagick php8.3 php8.3-{fpm,cli,curl,gd,mbstring,xml,zip,bz2,intl,bcmath,gmp,imagick,mysql} -y
+            apt-get install unzip imagemagick php8.3 php8.3-{fpm,cli,curl,gd,mbstring,xml,zip,bz2,intl,bcmath,gmp,imagick,mysql,redis} -y
             break
             ;;
         2)
@@ -65,7 +66,7 @@ while true; do
             apt-get install software-properties-common -y
             add-apt-repository ppa:ondrej/php -y
             apt-get update
-            apt-get install unzip imagemagick php8.3 php8.3-{fpm,cli,curl,gd,mbstring,xml,zip,bz2,intl,bcmath,gmp,imagick,mysql} -y
+            apt-get install unzip imagemagick php8.3 php8.3-{fpm,cli,curl,gd,mbstring,xml,zip,bz2,intl,bcmath,gmp,imagick,mysql,redis} -y
             break
             ;;
         *)
@@ -127,7 +128,8 @@ done
 apt-get install mariadb-server mariadb-client -y
 
 # Install Redis
-apt-get install redis-server php-redis -y
+# php8.X-redis already installed
+apt-get install redis-server -y
 phpenmod redis
 systemctl restart $webserver
 

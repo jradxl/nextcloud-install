@@ -1,3 +1,7 @@
+# Updates for my fork
+Working on Ubuntu 24.04, using php8.3 
+Needed php8.3-redis to be installed, see lines 59 and 69
+
 # Nextcloud-Install
 
 This repository contains a bash script to automate the installation of Nextcloud on Debian or Ubuntu servers. The script handles the installation and configuration of necessary dependencies, web server setup, database setup, and Nextcloud installation.
